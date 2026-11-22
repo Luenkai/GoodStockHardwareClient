@@ -14,6 +14,7 @@ argon2 = "0.5"
 rand_core = { version = "0.6", features = ["getrandom"] }
 qrcode = { version = "0.14", default-features = false }
 tempfile = "3"
+directories = "5"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

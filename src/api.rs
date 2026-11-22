@@ -2,6 +2,17 @@ use argon2::{password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, Sal
 use serde::{Deserialize, Serialize};
 use std::{sync::mpsc, time::Duration};
 
+
+// A writable per-user location is required when the app is started from a file manager.
+#[cfg(not(target_os = "android"))]
+pub fn data_dir() -> Result<std::path::PathBuf, String> {
+    directories::ProjectDirs::from("ph", "Goodstock", "Hardware")
+        .map(|p| p.data_local_dir().to_path_buf())
+        .ok_or_else(|| "Could not determine a writable user data directory".to_string())
+}
+#[cfg(target_os = "android")]
+pub fn data_dir() -> Result<std::path::PathBuf, String> { Ok(std::path::PathBuf::from(".")) }
+
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Product {
     pub sku: String, pub name: String, pub category: String, pub description: String,
@@ -37,7 +48,12 @@ impl Default for State {
 }
 impl State {
     pub fn load() -> (Self, String) {
-        match std::fs::read_to_string("goodstock_state.json") {
+        let dir = match data_dir() { Ok(dir) => dir, Err(e) => return (Self::default(), format!("Could not read state: {e}; existing file was not overwritten")) };
+        let path = dir.join("goodstock_state.json");
+        // Preserve state from older versions which stored it in the launch directory.
+        let legacy = std::path::Path::new("goodstock_state.json");
+        let path = if !path.exists() && legacy.exists() { legacy.to_path_buf() } else { path };
+        match std::fs::read_to_string(path) {
             Ok(s) => match serde_json::from_str::<Self>(&s) {
                 Ok(mut state) => {
                     let mut migrated = false;
@@ -62,10 +78,12 @@ impl State {
     }
     pub fn save(&self) -> Result<(), String> {
         let data = serde_json::to_vec_pretty(self).map_err(|e| e.to_string())?;
-        let mut file = tempfile::NamedTempFile::new_in(".").map_err(|e| e.to_string())?;
+        let dir = data_dir()?;
+        std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+        let mut file = tempfile::NamedTempFile::new_in(&dir).map_err(|e| e.to_string())?;
         use std::io::Write;
         file.write_all(&data).and_then(|_| file.flush()).map_err(|e| e.to_string())?;
-        file.persist("goodstock_state.json").map_err(|e| e.to_string())?;
+        file.persist(dir.join("goodstock_state.json")).map_err(|e| e.to_string())?;
         Ok(())
     }
     // Match by remote ID, unique SKU or unique title. New products start with zero local stock;
