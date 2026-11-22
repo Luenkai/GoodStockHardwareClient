@@ -1,5 +1,8 @@
 name: Publish desktop release assets
 on:
+  push:
+    branches: ['arena/**']
+    paths: ['.github/workflows/publish-desktop.yml']
   workflow_dispatch:
     inputs:
       build_run:
@@ -28,6 +31,13 @@ jobs:
         run: |
           set -euo pipefail
           tag="$INPUT_TAG"
+          if [ -z "$tag" ]; then
+            drafts=$(gh api "repos/$GH_REPO/releases?per_page=100" --jq '[.[] | select(.draft) | .tag_name]')
+            count=$(jq length <<< "$drafts")
+            if [ "$count" = 0 ]; then echo "ready=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+            if [ "$count" != 1 ]; then echo "::error::Select a draft release explicitly"; exit 1; fi
+            tag=$(jq -r '.[0]' <<< "$drafts")
+          fi
           info=$(gh release view "$tag" --json isDraft,targetCommitish)
           test "$(jq -r .isDraft <<< "$info")" = true
           target=$(jq -r .targetCommitish <<< "$info")
@@ -36,9 +46,11 @@ jobs:
           build=$(gh run view "$run" --json headSha,conclusion)
           test "$(jq -r .headSha <<< "$build")" = "$target"
           test "$(jq -r .conclusion <<< "$build")" = success
+          echo "ready=true" >> "$GITHUB_OUTPUT"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "run=$run" >> "$GITHUB_OUTPUT"
       - name: Download Windows
+        if: steps.release.outputs.ready == 'true'
         uses: actions/download-artifact@v4
         with:
           name: goodstock-windows-x64
@@ -46,6 +58,7 @@ jobs:
           run-id: ${{ steps.release.outputs.run }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download Linux
+        if: steps.release.outputs.ready == 'true'
         uses: actions/download-artifact@v4
         with:
           name: goodstock-linux-x64
@@ -53,6 +66,7 @@ jobs:
           run-id: ${{ steps.release.outputs.run }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download Mac Apple silicon
+        if: steps.release.outputs.ready == 'true'
         uses: actions/download-artifact@v4
         with:
           name: goodstock-macos-apple-silicon
@@ -60,6 +74,7 @@ jobs:
           run-id: ${{ steps.release.outputs.run }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download Mac Intel
+        if: steps.release.outputs.ready == 'true'
         uses: actions/download-artifact@v4
         with:
           name: goodstock-macos-intel
@@ -67,6 +82,7 @@ jobs:
           run-id: ${{ steps.release.outputs.run }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Assemble release downloads
+        if: steps.release.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -79,6 +95,7 @@ jobs:
           (cd artifacts/mac-intel && zip -q "$GITHUB_WORKSPACE/release/Goodstock-macOS-Intel.zip" IMAGE-CREDITS.txt README.txt)
           (cd release && sha256sum * > SHA256SUMS.txt)
       - name: Upload to the draft release
+        if: steps.release.outputs.ready == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
