@@ -74,10 +74,12 @@ jobs:
         run: |
           set -euo pipefail
           mkdir release
-          (cd artifacts/windows && zip -q "$GITHUB_WORKSPACE/release/Goodstock-Windows-x64.zip" 'Goodstock Hardware.exe' README.txt)
+          (cd artifacts/windows && zip -q "$GITHUB_WORKSPACE/release/Goodstock-Windows-x64.zip" 'Goodstock Hardware.exe' README.txt IMAGE-CREDITS.txt)
           cp artifacts/linux/goodstock-linux-x64.tar.gz release/Goodstock-Linux-x64.tar.gz
           cp 'artifacts/mac-arm/Goodstock Hardware macOS.zip' release/Goodstock-macOS-Apple-Silicon.zip
+          (cd artifacts/mac-arm && zip -q "$GITHUB_WORKSPACE/release/Goodstock-macOS-Apple-Silicon.zip" IMAGE-CREDITS.txt README.txt)
           cp 'artifacts/mac-intel/Goodstock Hardware macOS.zip' release/Goodstock-macOS-Intel.zip
+          (cd artifacts/mac-intel && zip -q "$GITHUB_WORKSPACE/release/Goodstock-macOS-Intel.zip" IMAGE-CREDITS.txt README.txt)
           (cd release && sha256sum * > SHA256SUMS.txt)
       - name: Upload to the draft release
         env:

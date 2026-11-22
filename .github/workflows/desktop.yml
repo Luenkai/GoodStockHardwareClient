@@ -41,6 +41,7 @@ jobs:
           New-Item -ItemType Directory -Path package | Out-Null
           Copy-Item 'target/${{ matrix.target }}/release/goodstock-desktop.exe' 'package/Goodstock Hardware.exe'
           Copy-Item README.md package/README.txt
+          Copy-Item assets/IMAGE-CREDITS.md package/IMAGE-CREDITS.txt
       - name: Package macOS app
         if: runner.os == 'macOS'
         shell: bash
@@ -66,6 +67,7 @@ jobs:
           rm -rf 'package/Goodstock Hardware.app'
           mv 'Goodstock Hardware macOS.zip' package/
           cp README.md package/README.txt
+          cp assets/IMAGE-CREDITS.md package/IMAGE-CREDITS.txt
       - name: Package Linux
         if: runner.os == 'Linux'
         shell: bash
@@ -74,7 +76,8 @@ jobs:
           cp 'target/${{ matrix.target }}/release/goodstock-desktop' 'package/Goodstock Hardware'
           chmod +x 'package/Goodstock Hardware'
           cp README.md package/README.txt
-          tar -C package -czf goodstock-linux-x64.tar.gz 'Goodstock Hardware' README.txt
+          cp assets/IMAGE-CREDITS.md package/IMAGE-CREDITS.txt
+          tar -C package -czf goodstock-linux-x64.tar.gz 'Goodstock Hardware' README.txt IMAGE-CREDITS.txt
           rm -rf package && mkdir package && mv goodstock-linux-x64.tar.gz package/
       - uses: actions/upload-artifact@v4
         with:
