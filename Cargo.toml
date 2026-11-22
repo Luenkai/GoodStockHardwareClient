@@ -1,0 +1,16 @@
+[package]
+name = "goodstock-desktop"
+version = "0.1.0"
+edition = "2021"
+authors = ["Mark Dollentes <markdanieldollentes23@gmail.com>"]
+
+[dependencies]
+eframe = "0.29"
+egui = "0.29"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+ureq = "2.10"
+argon2 = "0.5"
+rand_core = { version = "0.6", features = ["getrandom"] }
+qrcode = { version = "0.14", default-features = false }
+tempfile = "3"
