@@ -8,5 +8,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Install Linux dependencies
         run: sudo apt-get update && sudo apt-get install -y libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev libgtk-3-dev
-      - run: cargo check --all-targets
+      - name: Check all targets
+        shell: bash
+        run: |
+          set -o pipefail
+          cargo check --all-targets 2>&1 | tee check.log || { tail -100 check.log | while IFS= read -r line; do echo "::error::$line"; done; exit 1; }
       - run: cargo test -- --nocapture
