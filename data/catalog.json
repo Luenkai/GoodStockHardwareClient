@@ -1,0 +1,122 @@
+[
+  {
+    "sku": "GS-001",
+    "name": "No. 10 × 7/8 in. Phillips Pan-Head Sheet-Metal Screws",
+    "category": "Fasteners",
+    "description": "Steel sheet-metal screws with a zinc-plated finish, pan head, Phillips drive, and sharp self-tapping point. Size: No. 10 × 7/8 in. Drive: Phillips Finish: Zinc-plated Use: Indoor",
+    "price": 149.0,
+    "cost": 104.3,
+    "stock": 40,
+    "max_stock": 80
+  },
+  {
+    "sku": "GS-002",
+    "name": "3-Piece LM317 Adjustable Voltage Regulator Module",
+    "category": "Power & Electrical",
+    "description": "Three LM317 adjustable voltage regulator modules for electronics projects and bench prototyping. Adjustable output: 1.2–37 V Input: 4.2–40 V Current: 1.5 A minimum; 2.2 A typical as stated by the source listing Operating temperature: -55 to +150 °C as stated by the source listing",
+    "price": 299.0,
+    "cost": 209.3,
+    "stock": 18,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-003",
+    "name": "KONOE W-SUS-0012 Stainless-Steel Flat Washer, M12, 500-Pack",
+    "category": "Fasteners",
+    "description": "SUS304 stainless-steel flat washers for M12 fasteners. Nominal diameter: M12 Material: SUS304 stainless steel Pack: 500 pieces Source model: WSUS0012",
+    "price": 149.0,
+    "cost": 104.3,
+    "stock": 12,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-004",
+    "name": "Fujiwara Sangyo EPS-500 Precision Torx Screwdriver Set",
+    "category": "Tools",
+    "description": "Precision Torx screwdriver set for small fasteners and electronics work. Tips: T2, T3, T4, T5, T6, and T8 Tip length: 25 mm each Source model: EPS-500",
+    "price": 399.0,
+    "cost": 279.3,
+    "stock": 8,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-005",
+    "name": "ESCO EA560LA-3 Phillips Screwdriver, #3 × 150 mm",
+    "category": "Tools",
+    "description": "Phillips screwdriver with a #3 tip and 150 mm shaft. Tip: Phillips #3 Shaft length: 150 mm Shaft diameter: 8 mm per source listing Source model: EA560LA-3",
+    "price": 179.0,
+    "cost": 125.3,
+    "stock": 15,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-006",
+    "name": "MURATEC KDS GGR2575 Tape Measure, 7.5 m × 25 mm",
+    "category": "Tools",
+    "description": "Metric tape measure for general measuring tasks. Length: 7.5 m Width: 25 mm Scale: JIS Class 1, double-sided metric Features: lock, belt hook, and shock absorber",
+    "price": 399.0,
+    "cost": 279.3,
+    "stock": 10,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-007",
+    "name": "THREE PEAKS GIKEN LR-125S Needle-Nose Pliers, 125 mm",
+    "category": "Tools",
+    "description": "125 mm needle-nose pliers with a chrome-vanadium steel body and elastomer grips. Length: 125 mm Weight: 83 g Cut capacity per source listing: steel wire 1.5 mm; copper wire 2.6 mm Source model: LR-125S",
+    "price": 299.0,
+    "cost": 209.3,
+    "stock": 8,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-008",
+    "name": "KYOTO TOOL MS2-07 Combination Wrench, 7 mm",
+    "category": "Tools",
+    "description": "Compact 7 mm combination wrench for general fastening work. Size: 7 mm Length: 111 mm Weight: 20 g Source model: MS2-07",
+    "price": 199.0,
+    "cost": 139.3,
+    "stock": 12,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-009",
+    "name": "3M PIA220 Polyimide Electrical Insulation Tape, 9 mm × 33 m",
+    "category": "Power & Electrical",
+    "description": "High-temperature polyimide insulation tape for coils, transformers, and capacitors. Width: 9 mm Length: 33 m Thickness: 0.05 mm Temperature rating: 220 °C per source listing; verify manufacturer datasheet",
+    "price": 249.0,
+    "cost": 174.3,
+    "stock": 10,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-010",
+    "name": "FUJI TERMINAL INDUSTRY Glass Tube Fuse, 250 V, 2 A",
+    "category": "Power & Electrical",
+    "description": "Glass tube fuse for compatible electrical equipment. Check the device's specified rating before installation. Voltage: AC 250 V Current: 2 A Size: 6.4 × 30 mm Contacts: brass, nickel-plated per source listing",
+    "price": 39.0,
+    "cost": 27.3,
+    "stock": 30,
+    "max_stock": 60
+  },
+  {
+    "sku": "GS-011",
+    "name": "OMRON MY2 Mini Power Relay, AC 200/220 V",
+    "category": "Power & Electrical",
+    "description": "Mini power relay for compatible control equipment; confirm coil and contact ratings before installation. Rated coil voltage: AC 200/220 V Series: MY2 standard type Contact material: gold plating and silver per source listing",
+    "price": 349.0,
+    "cost": 244.3,
+    "stock": 8,
+    "max_stock": 40
+  },
+  {
+    "sku": "GS-012",
+    "name": "IDEC NRF11010A Circuit Breaker, 10 A",
+    "category": "Power & Electrical",
+    "description": "10 A circuit breaker for compatible electrical panels; installation and compatibility should be checked by a qualified person. Rated current: 10 A Terminal type: model 250 per source listing Source model: NRF11010A",
+    "price": 499.0,
+    "cost": 349.3,
+    "stock": 6,
+    "max_stock": 40
+  }
+]
