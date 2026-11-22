@@ -25,7 +25,7 @@ pub fn catalog(app:&mut App,ui:&mut egui::Ui){
         ui.add_space(12.0);ui.horizontal_wrapped(|ui|{ui.strong(format!("{} catalog SKUs",app.state.products.len()));ui.separator();ui.strong(format!("{} in stock",app.state.products.iter().filter(|p|p.stock>0).count()));});ui.add_space(20.0);
         let wide=ui.available_width()>720.0;
         // Allocate a fixed filter column, leaving the remaining width to the catalog.
-        if wide {ui.horizontal_top(|ui|{ui.allocate_ui_with_layout(egui::vec2(210.0,ui.available_height()),egui::Layout::top_down(egui::Align::Min),|ui|filters(app,ui));ui.separator();ui.vertical(|ui|products(app,ui));});} else {filters(app,ui);ui.separator();products(app,ui);}
+        if wide {ui.horizontal_top(|ui|{ui.allocate_ui_with_layout(egui::vec2(210.0,0.0),egui::Layout::top_down(egui::Align::Min),|ui|filters(app,ui));ui.separator();ui.vertical(|ui|products(app,ui));});} else {filters(app,ui);ui.separator();products(app,ui);}
     });
 }
 fn filters(app:&mut App,ui:&mut egui::Ui){card(ui,false).show(ui,|ui|{ui.set_min_width(170.0);ui.label(RichText::new("Filters").size(20.0).strong());ui.label("Find the right hardware");ui.separator();ui.strong("AISLES");for cat in ["All","Fasteners","Tools","Power & Electrical"] {let label=if cat=="All"{"All hardware"}else{cat};if ui.selectable_label(app.category==cat,label).clicked(){app.category=cat.into()}}ui.separator();ui.checkbox(&mut app.in_stock,"In stock only");if ui.button("Clear filters").clicked(){app.search.clear();app.category="All".into();app.in_stock=false;app.sort=0;}});}

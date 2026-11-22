@@ -1,8 +1,5 @@
 name: Publish desktop release assets
 on:
-  push:
-    branches: ['arena/**']
-    paths: ['.github/workflows/publish-desktop.yml']
   workflow_dispatch:
     inputs:
       build_run:
@@ -30,7 +27,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag="${INPUT_TAG:-v0.1.0}"
+          tag="$INPUT_TAG"
           info=$(gh release view "$tag" --json isDraft,targetCommitish)
           test "$(jq -r .isDraft <<< "$info")" = true
           target=$(jq -r .targetCommitish <<< "$info")

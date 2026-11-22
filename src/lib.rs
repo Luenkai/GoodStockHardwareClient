@@ -97,6 +97,15 @@ mod app_tests {
         app.delivery_address="123 Main Street".into(); app.checkout(false);
         assert_eq!(app.state.orders[0].delivery_address,"123 Main Street"); assert_eq!(app.state.products[0].stock,stock-1);
     }
+    #[test] fn storefront_and_workspace_render_without_panicking() {
+        let mut app=app(); let ctx=egui::Context::default();
+        app.textures=Some(store_ui::textures(&ctx));
+        for page in [Page::Entry, Page::Home, Page::Shop, Page::Overview] {
+            app.page=page;
+            let raw=egui::RawInput {screen_rect:Some(egui::Rect::from_min_size(egui::Pos2::ZERO,egui::vec2(1280.0,800.0))),..Default::default()};
+            let _=ctx.run(raw,|ctx|{store_ui::header(&mut app,ctx);egui::CentralPanel::default().show(ctx,|ui|match page {Page::Entry=>store_ui::entry(&mut app,ui),Page::Home=>store_ui::home(&mut app,ui),Page::Shop=>store_ui::catalog(&mut app,ui),_=>{ui.heading("Overview");}});});
+        }
+    }
     #[test] fn electronic_payment_requires_confirmation() {
         let mut app=app(); let sku=app.state.products[0].sku.clone(); app.pos_cart.push((sku,1)); app.tender=2;
         app.checkout(true); assert!(app.state.orders.is_empty()); app.payment_confirmed=true; app.checkout(true);
