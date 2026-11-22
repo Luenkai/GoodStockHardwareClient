@@ -42,7 +42,7 @@ jobs:
           HOME=$(mktemp -d) LIBGL_ALWAYS_SOFTWARE=1 timeout 15s xvfb-run -a 'target/${{ matrix.target }}/release/goodstock-desktop' > smoke.log 2>&1
           result=$?
           cat smoke.log
-          if [ "$result" -ne 124 ]; then echo "::error::Application exited during the startup smoke test ($result)"; exit 1; fi
+          if [ "$result" -ne 124 ]; then msg=$(tail -80 smoke.log | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}'); echo "::error::Startup failed ($result): $msg"; exit 1; fi
       - name: Package Windows
         if: runner.os == 'Windows'
         shell: pwsh
