@@ -14,3 +14,25 @@ argon2 = "0.5"
 rand_core = { version = "0.6", features = ["getrandom"] }
 qrcode = { version = "0.14", default-features = false }
 tempfile = "3"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[target.'cfg(target_os = "android")'.dependencies]
+winit = { version = "0.30", features = ["android-native-activity"] }
+eframe = { version = "0.29", features = ["android-native-activity"] }
+
+[package.metadata.android]
+package = "ph.goodstock.hardware"
+apk_name = "goodstock-hardware"
+build_targets = ["aarch64-linux-android"]
+
+[package.metadata.android.sdk]
+min_sdk_version = 23
+target_sdk_version = 35
+
+[package.metadata.android.application]
+label = "Goodstock Hardware"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.INTERNET"

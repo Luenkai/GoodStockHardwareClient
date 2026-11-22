@@ -1,0 +1,29 @@
+name: Android APK
+on:
+  workflow_dispatch:
+  push:
+    branches: ['arena/**']
+  pull_request:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+      - name: Install cargo-apk
+        run: cargo install cargo-apk --locked
+      - name: Build signed debug APK
+        shell: bash
+        run: |
+          set -o pipefail
+          export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME"
+          cargo apk build --lib 2>&1 | tee android-build.log || { msg=$(tail -80 android-build.log | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}'); echo "::error::$msg"; exit 1; }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: goodstock-hardware-android-arm64
+          path: target/debug/apk/goodstock-hardware.apk
+          if-no-files-found: error
+          retention-days: 90
