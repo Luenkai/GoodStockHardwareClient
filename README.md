@@ -10,7 +10,7 @@ Open **Actions → Desktop downloads**, select a successful run, and download th
 
 - **Windows x64:** extract the downloaded zip and double-click `Goodstock Hardware.exe`. Windows may warn that this application is unsigned.
 - **macOS:** choose Apple silicon or Intel, extract the artifact and then the included macOS zip, and open `Goodstock Hardware.app`. This build is ad-hoc signed, not notarized; macOS may block it. Use Finder's Open action and follow macOS security prompts if you trust the download.
-- **Linux x64:** extract the artifact and the included `.tar.gz`, then launch `Goodstock Hardware` from your file manager. The binary requires a compatible Linux desktop with standard GTK 3 / X11 or Wayland libraries. Some file managers require enabling the executable permission first.
+- **Linux x64:** extract the artifact and the included `.tar.gz`, then launch `Goodstock Hardware` from your file manager. The binary requires a compatible Linux desktop with standard GTK 3 / X11 or Wayland libraries, including libxkbcommon-x11 on X11. Some file managers require enabling the executable permission first.
 
 These are test builds, not signed installers. Local data is stored separately from the extracted application, so updating the app does not normally erase it. No terminal is needed for Windows or macOS launch.
 
