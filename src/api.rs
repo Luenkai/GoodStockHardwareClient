@@ -23,7 +23,7 @@ pub struct Account {
     pub password_hash: String,
 }
 #[derive(Serialize, Deserialize)]
-pub struct State { pub products: Vec<Product>, pub orders: Vec<Order>, pub accounts: Vec<Account>, pub next_order: u32, pub next_pos: u32 }
+pub struct State { pub products: Vec<Product>, pub orders: Vec<Order>, pub accounts: Vec<Account>, pub next_order: u32, pub next_pos: u32, #[serde(default)] pub api_url: String, #[serde(default)] pub gcash_qr_payload: String }
 
 pub fn hash_password(password: &str) -> Result<String, String> {
     let salt = SaltString::generate(&mut rand_core::OsRng);
@@ -33,7 +33,7 @@ pub fn verify_password(password: &str, hash: &str) -> bool {
     PasswordHash::new(hash).ok().is_some_and(|parsed| Argon2::default().verify_password(password.as_bytes(), &parsed).is_ok())
 }
 impl Default for State {
-    fn default() -> Self { Self { products: serde_json::from_str(include_str!("../data/catalog.json")).expect("embedded catalog"), orders: Vec::new(), accounts: Vec::new(), next_order: 1, next_pos: 1 } }
+    fn default() -> Self { Self { products: serde_json::from_str(include_str!("../data/catalog.json")).expect("embedded catalog"), orders: Vec::new(), accounts: Vec::new(), next_order: 1, next_pos: 1, api_url: String::new(), gcash_qr_payload: String::new() } }
 }
 impl State {
     pub fn load() -> (Self, String) {
@@ -98,11 +98,12 @@ impl State {
     }
 }
 // Read-only catalog synchronization; local orders and inventory are not sent to the server.
-pub fn sync() -> mpsc::Receiver<Result<Vec<serde_json::Value>, String>> {
+pub fn sync(base: String) -> mpsc::Receiver<Result<Vec<serde_json::Value>, String>> {
     let (tx, rx) = mpsc::channel();
     std::thread::spawn(move || {
         let result = (|| {
-            let base = std::env::var("GOODSTOCK_API_URL").map_err(|_| "Set GOODSTOCK_API_URL to enable sync".to_string())?;
+            if base.trim().is_empty() { return Err("Enter an API URL in Settings to enable sync".to_string()); }
+            if !base.starts_with("https://") { return Err("The API URL must use HTTPS".to_string()); }
             let url = format!("{}/api/trpc/storefront.products", base.trim_end_matches('/'));
             let agent = ureq::AgentBuilder::new().timeout(Duration::from_secs(15)).build();
             let response = agent.get(&url).call().map_err(|e| e.to_string())?;
