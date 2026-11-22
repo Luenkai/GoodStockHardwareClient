@@ -31,9 +31,9 @@ jobs:
         run: |
           set -euo pipefail
           tag="${INPUT_TAG:-v0.1.0}"
-          info=$(gh api "repos/$GH_REPO/releases/tags/$tag")
-          test "$(jq -r .draft <<< "$info")" = true
-          target=$(jq -r .target_commitish <<< "$info")
+          info=$(gh release view "$tag" --json isDraft,targetCommitish)
+          test "$(jq -r .isDraft <<< "$info")" = true
+          target=$(jq -r .targetCommitish <<< "$info")
           run="${INPUT_RUN:-$(gh run list --workflow desktop.yml --commit "$target" --json databaseId,conclusion --jq '[.[] | select(.conclusion == "success")][0].databaseId')}"
           test -n "$run" && test "$run" != null
           build=$(gh run view "$run" --json headSha,conclusion)
