@@ -12,5 +12,5 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          cargo check --all-targets 2>&1 | tee check.log || { msg=$(tail -80 check.log | sed 's/%/%25/g; s//%0D/g' | awk '{printf "%s%%0A", $0}'); echo "::error::$msg"; exit 1; }
+          cargo check --all-targets 2>&1 | tee check.log || { msg=$(tail -80 check.log | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}'); echo "::error::$msg"; exit 1; }
       - run: cargo test -- --nocapture
